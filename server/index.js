@@ -1,3 +1,5 @@
+// files and required package import
+
 const express = require("express")
 const app = express()
 const cors = require("cors")
@@ -5,8 +7,15 @@ require("dotenv").config()
 const mongoose = require("mongoose")
 
 
+// router imports
+
 const authRouter = require("./routes/auth_routes")
 
+const adminProductsRouter = require("./routes/admin/admin_productRoute")
+
+
+
+// api useage code 
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -53,6 +62,8 @@ app.listen(port, ()=>{
 app.use(express.json())
 
 app.use("/api/auth", authRouter);
+
+app.use("/api/admin", adminProductsRouter)
 
 
 
