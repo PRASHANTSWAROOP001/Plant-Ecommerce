@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet,useNavigate} from "react-router-dom";
 import {
   Facebook,
   Instagram,
@@ -8,10 +8,40 @@ import {
   User,
   Menu,
   X,
+  Settings,
+  LogOut
 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Avatar,AvatarFallback } from "../ui/avatar";
+
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+import { logoutUser } from "@/store/authReducer";
 
 function ShopLayout() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+
+  const {isAuthenticated, user} = useSelector((state)=>(state.auth))
+
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const handleLogout = ()=>{
+    console.log("you have logged out")
+    dispatch(logoutUser())  
+  }
+
+  const navigateToAcccount = ()=>{
+    navigate("/shop/account")
+  }
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -70,10 +100,43 @@ function ShopLayout() {
               {" "}
               <ShoppingCart size={24} />{" "}
             </Link>
-            <Link  className=" text-gray-800 hover:scale-110 hover:duration-100 hover:text-green-400">
+            <Link to={"/auth/login"}  className= {` ${isAuthenticated ? "hidden" : "block"} text-gray-800 hover:scale-110 hover:duration-100 hover:text-green-400 `}>
               {" "}
-              <User size={24} />{" "}
+              <User></User>
             </Link>
+            {isAuthenticated ? (
+        <DropdownMenu>
+          {/* Avatar as Trigger */}
+          <DropdownMenuTrigger asChild>
+            <Avatar className="cursor-pointer">
+              <AvatarFallback>{user?.userName?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+            </Avatar>
+          </DropdownMenuTrigger>
+
+          {/* Dropdown Menu Content */}
+          <DropdownMenuContent align="end" className="w-48 bg-white shadow-md">
+            {/* Account Info */}
+            <DropdownMenuItem onSelect={navigateToAcccount}>
+              <User className="mr-2 h-4 w-4 text-gray-500" />
+              Account
+            </DropdownMenuItem>
+
+            {/* Settings Page */}
+            <DropdownMenuItem onSelect={() => console.log("Navigate to Settings")}>
+              <Settings className="mr-2 h-4 w-4 text-gray-500" />
+              Settings
+            </DropdownMenuItem>
+
+            <DropdownMenuSeparator />
+
+            {/* Logout */}
+            <DropdownMenuItem onSelect={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4 text-gray-500" />
+              Logout
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : null}
           </div>
         </div>
 

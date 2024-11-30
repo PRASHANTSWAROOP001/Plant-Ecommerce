@@ -14,7 +14,7 @@ function CheckAuth({isAuthenticated, user, children}) {
   if(isAuthenticated && (location.pathname.includes("/login") || location.pathname.includes("/registration"))){
     if(user?.role == "admin"){
 
-      
+      return <Navigate to={"/admin/dashboard"}/>
 
     }
     else{
@@ -23,10 +23,19 @@ function CheckAuth({isAuthenticated, user, children}) {
   }
 
 
+  // Prevent non-admin users from accessing admin pages
+  if (isAuthenticated && location.pathname.includes("/admin") && user?.role !== "admin") {
+    return <Navigate to="/unauth-page" />;
+  }
 
-  return (
-    <div>CheckAuth</div>
-  )
+  // Redirect admins accessing shop page to the admin dashboard
+  if (isAuthenticated && user?.role === "admin" && location.pathname.includes("shop")) {
+    return <Navigate to="/admin/dashboard" />;
+  }
+
+  // Return children if none of the conditions match
+  return <>{children}</>;
+  
 }
 
 export default CheckAuth

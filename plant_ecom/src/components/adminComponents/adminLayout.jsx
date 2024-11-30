@@ -5,6 +5,9 @@ import { Outlet, Link, useLocation } from 'react-router-dom'
 import { Menu, X, Home,Package,ShoppingBasket, Gauge, LogOut } from 'lucide-react'
 
 import { Button } from '../ui/button'
+import { useDispatch } from 'react-redux'
+
+import { logoutUser } from '@/store/authReducer'
 
 // SidebarContext
 const SidebarContext = createContext(undefined)
@@ -46,9 +49,22 @@ const SidebarProvider = ({ children }) => {
 }
 
 // Sidebar component
+
+
+
+
 const Sidebar = () => {
   const { isOpen, toggle } = useSidebar()
   const location = useLocation()
+
+  const dispatch = useDispatch()
+
+  const handleLogout = ()=>{
+    dispatch(logoutUser());
+    console.log("pressed logout")
+  }
+
+
 
   const links = [
     { name: 'Dashboard', icon: Home, path: '/admin/dashboard' },
@@ -90,7 +106,7 @@ const Sidebar = () => {
         </ul>
 
         <div className='flex justify-center w-full py-5'>
-          <Button className='w-[90%]' varaint="Ghost">Logout <LogOut className='mx-2'></LogOut> </Button>
+          <Button onClick={handleLogout} className='w-[90%]' variant="destructive">Logout <LogOut className='mx-2'></LogOut> </Button>
         </div>
 
         

@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken")
 const bcryptjs = require("bcryptjs")
 const User = require("../models/User")
 
+
+
 const registerUser = async(req, res)=>{
 
     const {userName,email,password} = req.body
@@ -72,7 +74,8 @@ const login = async(req,res)=>{
             {
                 id:checkUser._id,
                 email:checkUser.email,
-                role:checkUser.role
+                role:checkUser.role,
+                userName:checkUser.userName
             },
             "Client_Secret_Key",
             {expiresIn:"60m"}
@@ -85,7 +88,8 @@ const login = async(req,res)=>{
             user:{
                 email:checkUser.email,
                 id:checkUser._id,
-                role:checkUser.role
+                role:checkUser.role,
+                userName:checkUser.userName
             }
         })
     } catch (error) {

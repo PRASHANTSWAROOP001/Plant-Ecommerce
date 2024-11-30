@@ -2,7 +2,7 @@ import React from 'react'
 
 function AdminProduct() {
   return (
-    <div>AdminProduct</div>
+    <div>Admin Product</div>
   )
 }
 

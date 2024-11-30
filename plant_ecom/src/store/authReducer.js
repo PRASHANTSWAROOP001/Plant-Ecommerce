@@ -40,6 +40,16 @@ export const loginUser = createAsyncThunk("/auth/login",
     }
 );
 
+export const logoutUser = createAsyncThunk("/auth/logout", 
+    async() => {
+        const responce = await axios.post("http://localhost:5000/api/auth/logout", {}, {
+            withCredentials: true,
+        })
+
+        return responce.data;
+    }
+)
+
 
 
 export const authSlice = createSlice({
@@ -101,6 +111,12 @@ export const authSlice = createSlice({
                 state.isLoading=true,
                 state.isAuthenticated = action.payload.success ? true : false,
                 state.user = action.payload.success ? action.payload.user : null
+            })
+
+            builder.addCase(logoutUser.fulfilled, (state)=>{
+                state.isLoading = false,
+                state.isAuthenticated = null,
+                state.user = null
             })
     }
 });

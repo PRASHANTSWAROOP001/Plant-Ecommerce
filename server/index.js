@@ -5,6 +5,7 @@ const app = express()
 const cors = require("cors")
 require("dotenv").config()
 const mongoose = require("mongoose")
+const cookieParser = require("cookie-parser")
 
 
 // router imports
@@ -29,6 +30,9 @@ app.use(cors({
     ],
     credentials: true
 }))
+
+
+app.use(cookieParser())
 
 
 
