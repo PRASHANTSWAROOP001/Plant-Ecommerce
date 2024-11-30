@@ -17,6 +17,19 @@ export const registerUser = createAsyncThunk("/auth/registerUser",
     }
 );
 
+export const checkAuth = createAsyncThunk("/auth/verifyUser",
+
+    async()=>{
+        const response = await axios.get("http://localhost:5000/api/auth/verifyUser", {
+            withCredentials:true,
+            headers: {
+                'Cache-Control':  'no-store, no-cache, must-revalidate, proxy-revalidate',
+            }
+        });
+        return response.data;
+    }
+)
+
 export const loginUser = createAsyncThunk("/auth/login", 
     async(FormData) => {
         const response = await axios.post("http://localhost:5000/api/auth/login", FormData, {
@@ -43,6 +56,7 @@ export const authSlice = createSlice({
     },
     // Removed extra comma here
     extraReducers: (builder) => {
+
         builder
             .addCase(registerUser.pending, (state) => {
                 state.isLoading = true;
@@ -72,6 +86,22 @@ export const authSlice = createSlice({
                 state.user = null;
                 state.isLoading = false;
             });
+
+            builder.addCase(checkAuth.pending, (state)=>{
+                state.isAuthenticated=false,
+                state.user = null,
+                state.isLoading=true
+            })
+            .addCase(checkAuth.rejected,(state)=>{
+                state.isAuthenticated=false,
+                state.user=null,
+                state.isLoading =true
+            })
+            .addCase(checkAuth.fulfilled,(state, action)=>{
+                state.isLoading=true,
+                state.isAuthenticated = action.payload.success ? true : false,
+                state.user = action.payload.success ? action.payload.user : null
+            })
     }
 });
 
