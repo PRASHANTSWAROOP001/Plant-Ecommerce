@@ -39,7 +39,7 @@ app.use(cookieParser())
 
 
 const mongoDbUrl = process.env.MONGO_DB_URL;
-console.log(mongoDbUrl)
+// console.log(mongoDbUrl)
 const connectToDb = async(url)=>{
     try {
         

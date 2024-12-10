@@ -6,11 +6,13 @@ const api_key= process.env.API_KEY;
 const api_secret_key = process.env.API_SECRET_KEY
 const cloud_name = process.env.CLOUD_NAME
 
+console.log(api_key, "api_key")
+
 
 cloudinary.config({
     cloud_name:cloud_name,
     api_key:api_key,
-    api_secret_key:api_secret_key
+    api_secret:api_secret_key
 })
 
 const storage = new multer.memoryStorage();

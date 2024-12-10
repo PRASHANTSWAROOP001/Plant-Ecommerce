@@ -1,9 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+import tailwindcssAnimate from "tailwindcss-animate";
+
 export default {
-    darkMode: ["class"],
+    darkMode: ['class'],
     content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    './src/**/*.{js,ts,jsx,tsx}', // Adjust according to your file structure
+    './node_modules/@shadcn/ui/**/*.js', // Ensure ShadCN UI components are included
   ],
   theme: {
   	extend: {
@@ -52,20 +53,9 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			},
-  			sidebar: {
-  				DEFAULT: 'hsl(var(--sidebar-background))',
-  				foreground: 'hsl(var(--sidebar-foreground))',
-  				primary: 'hsl(var(--sidebar-primary))',
-  				'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-  				accent: 'hsl(var(--sidebar-accent))',
-  				'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-  				border: 'hsl(var(--sidebar-border))',
-  				ring: 'hsl(var(--sidebar-ring))'
   			}
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
-}
-
+  plugins: [tailwindcssAnimate, import("tailwindcss-animate")],
+};

@@ -47,9 +47,14 @@ const addProduct = async (req,res)=>{
         category,
         careLevel,
         lightRequirement,
-        stock
+        stock,
+        price,
+        sellPrice
 
     } = req.body;
+
+
+    console.log(req.body);
 
     try {
 
@@ -62,7 +67,9 @@ const addProduct = async (req,res)=>{
                 category,
                 careLevel,
                 lightRequirement,
-                stock
+                stock,
+                price,
+                sellPrice
         
             }
         )
