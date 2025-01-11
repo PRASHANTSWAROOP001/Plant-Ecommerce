@@ -42,6 +42,7 @@ const addProduct = async (req, res) => {
   console.log(req.body);
 
   try {
+    // Create the new product
     const newProduct = new Product({
       imageUrl,
       name,
@@ -55,11 +56,14 @@ const addProduct = async (req, res) => {
       sellPrice,
     });
 
+    // Save the new product to the database
     await newProduct.save();
 
+    // Return the new product data along with success message
     res.status(200).json({
       success: true,
       message: "Product Added Successfully",
+      product: newProduct, // Send the product data as part of the response
     });
   } catch (error) {
     console.error("Error while adding product: ", error);
@@ -85,6 +89,7 @@ const fetchAllProducts = async (req, res) => {
     res.json({
       success: false,
       message: "error while fetching products",
+      
     });
   }
 };
@@ -93,7 +98,7 @@ const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const product = await Product.findById(id);
+    const product = await Product.findByIdAndDelete(id);
 
     if (!product) {
       return res.status(404).json({
@@ -139,42 +144,34 @@ const editProduct = async (req, res) => {
       sellPrice,
     } = req.body;
 
-    editProduct.name = editProduct.name || name;
-
-    editProduct.scientificName = editProduct.scientificName || scientificName;
-
-    editProduct.price = editProduct.price || price;
-
-    editProduct.sellPrice = editProduct.sellPrice || sellPrice;
-
-    editProduct.stock = editProduct.stock || stock;
-
-    editProduct.description = editProduct.description || description;
-
-    editProduct.category = editProduct.category || category;
-
-    editProduct.careLevel = editProduct.careLevel || careLevel;
-
-    editProduct.lightRequirement =
-      editProduct.lightRequirement || lightRequirement;
-
-    editProduct.imageUrl = editProduct.imageUrl || imageUrl;
+    // Update fields with the correct logic
+    editProduct.name = name || editProduct.name;
+    editProduct.scientificName = scientificName || editProduct.scientificName;
+    editProduct.price = price || editProduct.price;
+    editProduct.sellPrice = sellPrice || editProduct.sellPrice;
+    editProduct.stock = stock || editProduct.stock;
+    editProduct.description = description || editProduct.description;
+    editProduct.category = category || editProduct.category;
+    editProduct.careLevel = careLevel || editProduct.careLevel;
+    editProduct.lightRequirement = lightRequirement || editProduct.lightRequirement;
+    editProduct.imageUrl = imageUrl || editProduct.imageUrl;
 
     await editProduct.save();
 
     return res.status(201).json({
       success: true,
-      message: "product updated successfully",
+      message: "Product updated successfully",
     });
   } catch (error) {
-    console.log("error happend while trying to modify product", error);
+    console.error("Error happened while trying to modify product", error);
 
     return res.status(501).json({
       success: false,
-      message: "Error Happend while trying to modify Product.",
+      message: "Error happened while trying to modify product.",
     });
   }
 };
+
 
 //add a function to edit existing products
 

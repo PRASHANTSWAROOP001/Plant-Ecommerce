@@ -7,9 +7,13 @@ function AdminProductTile({
   setOpenCreateProductDialog,
   setFormData,
   handleDelete,
-}) {
+}
+) 
+{
+  //console.log(product)
+
   return (
-    <Card className="w-full max-w-sm mx-auto">
+    <Card key={product._id} className="w-full max-w-sm mx-auto">
       <div>
         <div className="relative">
           <img
@@ -27,12 +31,12 @@ function AdminProductTile({
               product?.salePrice > 0 ? "line-through" : ""
             } text-lg font-semibold text-primary`}
           >
-            ${product?.price}
+           Price ${product?.price}
           </span>
 
           <span className="">
-            {product?.salePrice > 0 ? (
-              <span className="text-lg font-bold">${product?.salePrice}</span>
+           Sale Price {product?.sellPrice > 0 ? (
+              <span className="text-lg font-bold">${product?.sellPrice}</span>
             ) : null}
           </span>
         </div>

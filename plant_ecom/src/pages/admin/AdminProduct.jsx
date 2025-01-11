@@ -16,6 +16,7 @@ import {
   addProduct,
   fetchAllProducts,
   deleteProduct,
+  editProduct,
 } from "@/store/adminProductReducer";
 import AdminProductTile from "@/components/adminComponents/adminProductTile";
 
@@ -48,52 +49,72 @@ function AdminProduct() {
 
   function onSubmit(e) {
     e.preventDefault();
-    if (uploadedImageUrl == "" || imageLoadingState) {
-      alert("please upload the image and get imageUrl");
-    } else {
-      dispatch(
-        addProduct({
-          ...formData,
-          price: Number(formData.price),
-          sellPrice: Number(formData.sellPrice),
-          stock: Number(formData.stock),
-          imageUrl: uploadedImageUrl,
-        })
-      ).then((data) => {
-        if (data?.payload?.success) {
-          toast({
-            title: "Product Added Successfull",
-          });
 
-          setFormData(initialState);
-          setImageFile(null);
+    currentEditedId != null
+      ? dispatch(editProduct({ id: currentEditedId, formData })).then(
+          (data) => {
+            if (data?.payload?.success == true) {
+              toast({
+                title: "Product Updated Successfully",
+              });
+              setOpenCreateProductDialog(false);
+              dispatch(fetchAllProducts());
+            }
+          }
+        )
+      : dispatch(
+          addProduct({
+            ...formData,
+            price: Number(formData.price),
+            sellPrice: Number(formData.sellPrice),
+            stock: Number(formData.stock),
+            imageUrl: uploadedImageUrl,
+          })
+        ).then((data) => {
+          //console.log(data)
 
-          dispatch(fetchAllProducts());
-        } else {
-          toast({
-            title: "Error While Adding Product",
-          });
-        }
-      });
-    }
+          if (data?.payload?.success) {
+            toast({
+              title: "Product Added Successfull",
+            });
+
+            setFormData(initialState);
+            setImageFile(null);
+
+            dispatch(fetchAllProducts());
+          } else {
+            toast({
+              title: "Error While Adding Product",
+            });
+          }
+        });
   }
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  const handleDelete = () => {
-    console.log("deleting a product");
-  };
+  const handleDelete = (getCurrentId) => {
+    //console.log(getCurrentId);
 
-  console.log(productList);
+    dispatch(deleteProduct(getCurrentId)).then((data) => {
+      //console.log(data);
+
+      if (data?.payload?.success == true) {
+        dispatch(fetchAllProducts());
+        toast({
+          title: "Product Deleted Successfully.",
+        });
+      }
+    });
+  };
 
   return (
     <>
       <div className="mb-5 flex justify-end w-full">
         <Button onClick={() => setOpenCreateProductDialog(true)}>
           {" "}
-          add Product
+          Add Product
         </Button>
       </div>
 
@@ -116,11 +137,15 @@ function AdminProduct() {
         open={openCreateProductDialog}
         onOpenChange={() => {
           setOpenCreateProductDialog(false);
+          setCurrentEditedId(null);
+          setFormData(initialState);
         }}
       >
         <SheetContent className="overflow-y-auto max-h-screen">
           <SheetHeader>
-            <SheetTitle className="pb-2 text-center">Add Product</SheetTitle>
+            <SheetTitle className="pb-2 text-center">
+              {currentEditedId != null ? "Edit Product" : "Add Product"}
+            </SheetTitle>
           </SheetHeader>
 
           <ImageUpload
@@ -136,7 +161,9 @@ function AdminProduct() {
             <CommonForm
               formData={formData}
               setFormData={setFormData}
-              buttonText={"Add Product"}
+              buttonText={
+                currentEditedId != null ? "Edit Product" : "Add Product"
+              }
               onSubmit={onSubmit}
               formControls={addProductFormElements}
             ></CommonForm>
