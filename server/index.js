@@ -14,7 +14,7 @@ const authRouter = require("./routes/auth_routes")
 
 const adminProductsRouter = require("./routes/admin/admin_productRoute")
 
-
+const shopProductsRouter = require("./routes/shop/shopProduct")
 
 // api useage code 
 
@@ -67,7 +67,9 @@ app.use(express.json())
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/admin", adminProductsRouter)
+app.use("/api/admin", adminProductsRouter);
+
+app.use("/api/shop/product", shopProductsRouter);
 
 
 

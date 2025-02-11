@@ -49,7 +49,7 @@ function Registration() {
 
       
    const response = await dispatch(registerUser(formData))
-   console.log(response)
+   //console.log(response)
    toast({
     title:"User have successfully Registered"
    })

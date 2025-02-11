@@ -72,4 +72,24 @@ export const addProductFormElements = [
       placeholder: "Enter sale price",
     },
   ];
+
+  export const categories = [
+    "Indoor Plants",
+    "Outdoor Plants",
+    "Succulents",
+    "Flowering Plants",
+    "Herbs",
+  ];
+  
+  export const brands = [
+    "GreenThumb Co.",
+    "Nature's Bliss",
+    "EcoGrow",
+    "Leaf & Soil",
+    "Urban Jungle",
+    "Plantify",
+    "GrowMore",
+    "FloraRoots",
+  ];
+  
   

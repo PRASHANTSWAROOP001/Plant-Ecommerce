@@ -28,9 +28,9 @@ function Login() {
       [name]:value
     })
 
-    console.log(name,value);
+   // console.log(name,value);
 
-    console.log(formData)
+    //console.log(formData)
   }
 
 

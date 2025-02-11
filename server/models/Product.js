@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      enum: ["indoor", "outdoor", "succulents", "flowering"],
+      enum: ["indoor", "outdoor", "succulents", "flowering", "herbs"],
       required: true,
     },
     careLevel: {
