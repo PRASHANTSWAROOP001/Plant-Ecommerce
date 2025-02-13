@@ -1,8 +1,9 @@
 import React from "react";
 
-function ShopTile({ product }) {
+function ShopTile({ product, handleGetProductDetails }) {
   return (
     <div
+      onClick={()=>handleGetProductDetails(product?._id)}
       key={product._id}
       className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
     >

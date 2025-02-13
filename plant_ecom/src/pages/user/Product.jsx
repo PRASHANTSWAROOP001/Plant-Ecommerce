@@ -1,5 +1,6 @@
+import ProductDetails from "@/components/shopComponents/ProductDetails";
 import ShopTile from "@/components/shopComponents/ShopTile";
-import { fetchAllFilteredProdcuts } from "@/store/shopProductReducer";
+import { fetchAllFilteredProdcuts, fetchProdctDetails } from "@/store/shopProductReducer";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -57,13 +58,15 @@ function App() {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const { productList } = useSelector((state) => state.shopProduct);
+  const { productList, productDetails} = useSelector((state) => state.shopProduct);
 
   const dispatch = useDispatch();
 
-  console.log("Product list at shopping side: ", productList);
+  console.log("Product list shopping side: ", productList);
 
   useEffect(() => {
     const params = Object.fromEntries([...searchParams])
@@ -97,6 +100,15 @@ function App() {
 
   },[selectedBrands, selectedCategory, sortOption])
 
+
+  useEffect(()=>{
+
+    if (productDetails != null){
+      setOpenDetailsDialog(true)
+    }
+
+  },[productDetails])
+
   console.log(
     "filters in order: sortOptions, toggleBrands, toggleCategory",
     sortOption,
@@ -117,6 +129,15 @@ function App() {
         : [...prev, category]
     );
   };
+
+
+  function handleGetProductDetails(getCurrId){
+    console.log(getCurrId);
+    dispatch(fetchProdctDetails(getCurrId))
+  }
+
+
+  console.log("fetchedDetailed Product: ", productDetails)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -194,9 +215,11 @@ function App() {
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {productList.map((product) => (
-                <ShopTile key={product._id} product={product} />
+                <ShopTile handleGetProductDetails={handleGetProductDetails} key={product._id} product={product} />
               ))}
             </div>
+
+            <ProductDetails open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}></ProductDetails>
           </div>
         </main>
       </div>

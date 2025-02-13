@@ -19,10 +19,10 @@ const getFilteredProducts = async(req, res)=>{
         filters.brand = { $in: Array.isArray(brand) ? brand : brand.split(",") };
     }
 
-    console.log("Received Query Params:", req.query); 
+    // console.log("Received Query Params:", req.query); 
 
 
-    console.log(filters)
+    // console.log(filters)
 
     let sort = {}
 
@@ -55,7 +55,7 @@ const getFilteredProducts = async(req, res)=>{
             data:product
         })
 
-        console.log(product)
+        // console.log(product)
         
     } catch (error) {
         console.error("Error happpend while getting products: ", error);
@@ -67,4 +67,41 @@ const getFilteredProducts = async(req, res)=>{
 }
 
 
-module.exports = {getFilteredProducts}
+const getProductDetails = async (req,res)=>{
+
+    const {id} = req.params;
+
+    console.log(id)
+    
+    try {
+
+        const product = await Product.findById(id)
+
+        if(!product){
+            return res.status(404).json({
+                success:false,
+                message:"Spacified Product Is Not A Found!"
+            })
+        }
+        console.log("product at details: ", product)
+        return res.status(200).json({
+            success:true,
+            data:product
+        })
+        
+    } catch (error) {
+
+        console.error("Error happend while getting product details: ", error)
+
+        res.status(500).json({
+            success:false,
+            message:"error happend while getting product details: ",
+            error: error
+        })
+        
+    }
+
+}
+
+
+module.exports = {getFilteredProducts, getProductDetails}
