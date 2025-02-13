@@ -13,8 +13,8 @@ import {
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar,AvatarFallback } from "../ui/avatar";
-
-
+import { Sheet } from "../ui/sheet";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,18 +25,22 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { logoutUser } from "@/store/authReducer";
+import CartWrapper from "./CartWrapper";
 
 function ShopLayout() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const {isAuthenticated, user} = useSelector((state)=>(state.auth))
 
+  const [sheetOpen, setSheetOpen] = React.useState(false)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const handleLogout = ()=>{
     console.log("you have logged out")
-    dispatch(logoutUser())  
+    dispatch(logoutUser()) 
+    navigate("/shop/home");
   }
 
   const navigateToAcccount = ()=>{
@@ -96,10 +100,11 @@ function ShopLayout() {
           </ul>
 
           <div className="flex items-center gap-10 ">
-            <Link to='/shop/checkout' className=" text-gray-800 hover:scale-110 hover:duration-100 hover:text-green-400">
-              {" "}
-              <ShoppingCart size={24} />{" "}
-            </Link>
+              <Sheet open={sheetOpen} onOpenChange={()=>setSheetOpen(false)}>
+              {/* no need to use seprate checkoutPage*/}
+              <Button variant={"ghost"} size='icon' onClick={()=>setSheetOpen(true)}> <ShoppingCart size={24} /> </Button>
+              <CartWrapper/>
+              </Sheet>
             <Link to={"/auth/login"}  className= {` ${isAuthenticated ? "hidden" : "block"} text-gray-800 hover:scale-110 hover:duration-100 hover:text-green-400 `}>
               {" "}
               <User></User>

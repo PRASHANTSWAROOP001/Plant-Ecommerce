@@ -16,6 +16,8 @@ const adminProductsRouter = require("./routes/admin/admin_productRoute")
 
 const shopProductsRouter = require("./routes/shop/shopProduct")
 
+const shopCartRouter = require("./routes/shop/cartRoute")
+
 // api useage code 
 
 app.use(cors({
@@ -71,7 +73,7 @@ app.use("/api/admin", adminProductsRouter);
 
 app.use("/api/shop/product", shopProductsRouter);
 
-
+app.use("/api/shop/cart", shopCartRouter)
 
 
 
