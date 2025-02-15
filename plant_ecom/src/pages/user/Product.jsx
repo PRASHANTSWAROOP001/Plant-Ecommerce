@@ -1,6 +1,7 @@
 import ProductDetails from "@/components/shopComponents/ProductDetails";
 import ShopTile from "@/components/shopComponents/ShopTile";
 import { fetchAllFilteredProdcuts, fetchProdctDetails } from "@/store/shopProductReducer";
+import { addToCart, fetchCart } from "@/store/shopCartReducer";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -64,6 +65,10 @@ function App() {
 
   const { productList, productDetails} = useSelector((state) => state.shopProduct);
 
+  const {user} = useSelector((state)=> state.auth)
+
+
+
   const dispatch = useDispatch();
 
   console.log("Product list shopping side: ", productList);
@@ -109,12 +114,12 @@ function App() {
 
   },[productDetails])
 
-  console.log(
-    "filters in order: sortOptions, toggleBrands, toggleCategory",
-    sortOption,
-    selectedBrands,
-    selectedCategory
-  );
+  // console.log(
+  //   "filters in order: sortOptions, toggleBrands, toggleCategory",
+  //   sortOption,
+  //   selectedBrands,
+  //   selectedCategory
+  // );
 
   const toggleBrand = (brand) => {
     setSelectedBrands((prev) =>
@@ -132,12 +137,25 @@ function App() {
 
 
   function handleGetProductDetails(getCurrId){
-    console.log(getCurrId);
+    // console.log(getCurrId);
     dispatch(fetchProdctDetails(getCurrId))
   }
 
+  function handleAddToCart(currProductId){
+    // console.log(currProductId);
 
-  console.log("fetchedDetailed Product: ", productDetails)
+    dispatch(addToCart({ userId:user.id, productId:currProductId, quantity:1 })).then((data)=>{
+      if(data.payload?.success)[
+        dispatch(fetchCart(user?.id)).then((data)=>{
+          console.log(data);
+        })
+      ]
+    })
+    
+  }
+
+
+  // console.log("fetchedDetailed Product: ", productDetails)
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -215,7 +233,7 @@ function App() {
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {productList.map((product) => (
-                <ShopTile handleGetProductDetails={handleGetProductDetails} key={product._id} product={product} />
+                <ShopTile handleAddToCart={handleAddToCart} handleGetProductDetails={handleGetProductDetails} key={product._id} product={product} />
               ))}
             </div>
 

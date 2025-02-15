@@ -5,8 +5,6 @@ const getFilteredProducts = async(req, res)=>{
 
     const {category=[], brand=[],sortBy="price-asc"} = req.query;
 
-    console.log(req.query)
-
     let filters = {};
 
     // Convert category to an array if it's a string
@@ -28,19 +26,19 @@ const getFilteredProducts = async(req, res)=>{
 
     switch(sortBy){
         case "price-asc":
-            sort.price = 1
+            sort.sellPrice = 1
             break;
         case "price-desc":
-            sort.price = -1
+            sort.sellPrice = -1
             break;
         case "name-asc":
-            sort.title =1
+            sort.name =1
             break;
         case "name-desc":
-            sort.title=-1
+            sort.name=-1
             break;
         default:
-            sort.price = 1
+            sort.sellPrice = 1
             break;   
 
     }

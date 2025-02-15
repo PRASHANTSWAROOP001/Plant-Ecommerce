@@ -1,5 +1,5 @@
 const Cart = require("../../models/Cart");
-const Product = require("../../models/Product");
+const {Product} = require("../../models/Product");
 
 const addToCart = async (req, res) => {
   try {
@@ -43,6 +43,7 @@ const addToCart = async (req, res) => {
       success: true,
       data: cart,
     });
+    
   } catch (error) {
     console.error("Error happend while adding or creating a product:", error);
 

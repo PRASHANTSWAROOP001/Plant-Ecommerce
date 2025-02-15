@@ -26,11 +26,15 @@ import {
 
 import { logoutUser } from "@/store/authReducer";
 import CartWrapper from "./CartWrapper";
+import { fetchCart } from "@/store/shopCartReducer";
 
 function ShopLayout() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   const {isAuthenticated, user} = useSelector((state)=>(state.auth))
+
+  const {cartItems} = useSelector((state)=>(state.shopCart))
+
 
   const [sheetOpen, setSheetOpen] = React.useState(false)
 
@@ -73,6 +77,16 @@ function ShopLayout() {
     };
   }, [isMenuOpen]);
 
+
+  React.useEffect(()=>{
+       if(!user){
+        navigate("/auth/login")
+       }
+       else{
+        dispatch(fetchCart(user?.id))
+       }
+  },[dispatch, user])
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       <nav className="w-full px-5 flex justify-between items-center py-4 shadow-md">
@@ -100,10 +114,11 @@ function ShopLayout() {
           </ul>
 
           <div className="flex items-center gap-10 ">
-              <Sheet open={sheetOpen} onOpenChange={()=>setSheetOpen(false)}>
+              <Sheet  open={sheetOpen} onOpenChange={()=>setSheetOpen(false)}>
               {/* no need to use seprate checkoutPage*/}
               <Button variant={"ghost"} size='icon' onClick={()=>setSheetOpen(true)}> <ShoppingCart size={24} /> </Button>
-              <CartWrapper/>
+              <CartWrapper cartItems={cartItems} />
+
               </Sheet>
             <Link to={"/auth/login"}  className= {` ${isAuthenticated ? "hidden" : "block"} text-gray-800 hover:scale-110 hover:duration-100 hover:text-green-400 `}>
               {" "}

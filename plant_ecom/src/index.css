@@ -64,3 +64,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Ensures scrollbar appears on the far right */
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Thumb (Draggable part) */
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #6b7280; /* Dark gray */
+  border-radius: 10px;
+}
+
+/* Track (Background of scrollbar) */
+.scrollbar::-webkit-scrollbar-track {
+  background: #e5e7eb; /* Light gray */
+}
+
+/* For Firefox */
+.scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #6b7280 #e5e7eb;
+}

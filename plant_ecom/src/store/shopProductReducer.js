@@ -29,9 +29,9 @@ export const fetchAllFilteredProdcuts = createAsyncThunk(
 
     try {
       let url = `http://localhost:5000/api/shop/product/get?${queryParams.toString()}`
-      console.log(url)
+      //console.log(url)
       const result = await axios.get(url);
-      console.log("fetched data response: ", result.data)
+      //console.log("fetched data response: ", result.data)
       return result?.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch products");

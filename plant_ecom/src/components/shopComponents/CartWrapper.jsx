@@ -1,33 +1,37 @@
-import React from 'react'
-import { SheetContent, SheetTitle, SheetHeader } from '../ui/sheet'
-import { Button } from '../ui/button'
+import React from "react";
+import { SheetContent, SheetTitle, SheetHeader } from "../ui/sheet";
+import { Button } from "../ui/button";
+import CartProduct from "./CartProduct";
 
-function CartWrapper() {
+function CartWrapper({ cartItems }) {
   return (
-    <SheetContent>
+    <SheetContent className="flex flex-col h-full">
+      {/* Header (Fixed at Top) */}
+      <SheetHeader>
+        <SheetTitle>Your Cart</SheetTitle>
+      </SheetHeader>
 
-        <SheetHeader>
-            <SheetTitle>Your Cart</SheetTitle>
-        </SheetHeader>
+      {/* Scrollable Cart Items */}
+      <div className="flex-1 overflow-y-auto pr-4 scrollbar">
+        {cartItems && cartItems.length > 0 ? (
+          cartItems.map((item) => (
+            <CartProduct cartItem={item} key={item?.productId} />
+          ))
+        ) : (
+          <p className="text-center text-gray-500">Your cart is empty.</p>
+        )}
+      </div>
 
-        <div className='mt-8 space-y-4'>
-            {/* Cart Items */}
-
+      {/* Total + Checkout (Fixed at Bottom) */}
+      <div className="p-4 border-t">
+        <div className="flex justify-between text-lg font-bold">
+          <span>Total</span>
+          <span>$ {/* Add total amount here */}</span>
         </div>
-
-        <div className='mt-8 space-y-4'>
-
-            <div className='flex  justify-between'>
-                <span className='font-bold'>Total</span>
-                <span className='font-bold'>Amount $ </span>
-            </div>
-
-        </div>
-
-        <Button className='w-full mt-6'>Checkout</Button>
-
+        <Button className="w-full mt-4">Checkout</Button>
+      </div>
     </SheetContent>
-  )
+  );
 }
 
-export default CartWrapper
+export default CartWrapper;
