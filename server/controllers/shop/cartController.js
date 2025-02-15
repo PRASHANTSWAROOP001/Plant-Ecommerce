@@ -138,7 +138,7 @@ const deleteCartItems = async (req, res) => {
     }
 
     cart.items = cart.items.filter(
-      (item) => item.productId._id.toString() !== productId
+      (item) => item.productId.toString() !== productId
     );
 
     await cart.save();

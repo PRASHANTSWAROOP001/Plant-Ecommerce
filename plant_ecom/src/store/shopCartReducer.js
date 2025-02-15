@@ -47,6 +47,7 @@ export const updateCartItemsQuantity = createAsyncThunk("cart/updateCartItems", 
 
 export const deleteCartItems = createAsyncThunk("cart/deleteCartItems", async ({ userId, productId }) => {
     try {
+        console.log("userid,productid", userId,productId )
         const response = await axios.delete(`http://localhost:5000/api/shop/cart/${userId}/${productId}`);
         return response.data;
     } catch (error) {
@@ -98,7 +99,7 @@ const shoppingCartSlice = createSlice({
             })
             .addCase(deleteCartItems.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.cartItems = state.cartItems.filter(item => item.productId !== action.payload.productId);
+                state.cartItems = action.payload?.data?.items;
             })
             .addCase(deleteCartItems.rejected, (state) => {
                 state.isLoading = false;

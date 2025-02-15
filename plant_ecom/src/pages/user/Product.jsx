@@ -5,6 +5,7 @@ import { addToCart, fetchCart } from "@/store/shopCartReducer";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 
 const categories = [
   "indoor",
@@ -66,6 +67,8 @@ function App() {
   const { productList, productDetails} = useSelector((state) => state.shopProduct);
 
   const {user} = useSelector((state)=> state.auth)
+
+  const {toast} = useToast()
 
 
 
@@ -145,11 +148,15 @@ function App() {
     // console.log(currProductId);
 
     dispatch(addToCart({ userId:user.id, productId:currProductId, quantity:1 })).then((data)=>{
-      if(data.payload?.success)[
+      if(data.payload?.success){
+        toast({
+          title:"Product Added To Cart",
+        })
+
         dispatch(fetchCart(user?.id)).then((data)=>{
           console.log(data);
         })
-      ]
+    }
     })
     
   }
