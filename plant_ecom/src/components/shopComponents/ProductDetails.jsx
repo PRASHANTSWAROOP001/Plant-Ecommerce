@@ -1,10 +1,44 @@
 import { Dialog, DialogContent } from "../ui/dialog"
 import { Button } from "../ui/button"
 import { Star, Leaf, Droplet, Sun, ThermometerSun, DollarSign } from "lucide-react"
+import { useSelector, useDispatch } from "react-redux"
+import { useToast } from "@/hooks/use-toast"
+
+import { addToCart, fetchCart } from "@/store/shopCartReducer"
+import { setProductDetails } from "@/store/shopProductReducer"
 
 function ProductDetails({ open, setOpen, productDetails }) {
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { toast } = useToast();
+
+  //console.log(productDetails, "product details");
+
+  function handleAddToCart(currProductId) {
+    // console.log(currProductId);
+
+    dispatch(
+      addToCart({ userId: user.id, productId: currProductId, quantity: 1 })
+    ).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: "Product Added To Cart",
+        });
+
+        dispatch(fetchCart(user?.id)).then((data) => {
+          console.log(data);
+        });
+      }
+    });
+  }
+
+  function handleOpen(){
+    setOpen(false)
+    dispatch(setProductDetails())
+  }
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpen}>
       <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
         <div className="grid md:grid-cols-2 gap-8 p-6">
           <div className="space-y-4">
@@ -18,15 +52,21 @@ function ProductDetails({ open, setOpen, productDetails }) {
               />
             </div>
             <div className="bg-green-50 p-4 rounded-lg">
-              <h3 className="text-lg font-semibold text-green-800 mb-2">Plant Care</h3>
+              <h3 className="text-lg font-semibold text-green-800 mb-2">
+                Plant Care
+              </h3>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center">
                   <Leaf className="w-5 h-5 text-green-600 mr-2" />
-                  <span className="text-sm capitalize">Care Level: {productDetails?.careLevel}</span>
+                  <span className="text-sm capitalize">
+                    Care Level: {productDetails?.careLevel}
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <Sun className="w-5 h-5 text-yellow-500 mr-2" />
-                  <span className="text-sm  capitalize">Light: {productDetails?.lightRequirement}</span>
+                  <span className="text-sm  capitalize">
+                    Light: {productDetails?.lightRequirement}
+                  </span>
                 </div>
                 <div className="flex items-center">
                   <Droplet className="w-5 h-5 text-blue-500 mr-2" />
@@ -42,34 +82,51 @@ function ProductDetails({ open, setOpen, productDetails }) {
           <div className="flex flex-col justify-between">
             <div className="space-y-4">
               <div>
-                <h1 className="text-3xl font-extrabold text-green-800">{productDetails?.name}</h1>
-                <p className="text-xl italic text-green-600">{productDetails?.scientificName}</p>
+                <h1 className="text-3xl font-extrabold text-green-800">
+                  {productDetails?.name}
+                </h1>
+                <p className="text-xl italic text-green-600">
+                  {productDetails?.scientificName}
+                </p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center">
                   <DollarSign className="w-5 h-5 text-green-600" />
-                  <span className="text-2xl font-bold text-green-600">{productDetails?.sellPrice.toFixed(2)}</span>
+                  <span className="text-2xl font-bold text-green-600">
+                    {productDetails?.sellPrice.toFixed(2)}
+                  </span>
                 </div>
                 {productDetails?.price !== productDetails?.sellPrice && (
-                  <span className="text-lg line-through text-gray-500">${productDetails?.price.toFixed(2)}</span>
+                  <span className="text-lg line-through text-gray-500">
+                    ${productDetails?.price.toFixed(2)}
+                  </span>
                 )}
               </div>
               <p className="text-gray-600">{productDetails?.description}</p>
             </div>
             <div className="mt-6 space-y-4">
-              <Button className="w-full bg-green-600 hover:bg-green-700 text-white">Add to Cart</Button>
+              <Button
+                onClick={() => handleAddToCart(productDetails?._id)}
+                className="w-full bg-green-600 hover:bg-green-700 text-white"
+              >
+                Add to Cart
+              </Button>
               <div className="flex items-center justify-between">
                 <div className="flex">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <Star
                       key={star}
                       className={`w-5 h-5 ${
-                        star <= (productDetails?.rating || 0) ? "text-yellow-400 fill-current" : "text-gray-300"
+                        star <= (productDetails?.rating || 0)
+                          ? "text-yellow-400 fill-current"
+                          : "text-gray-300"
                       }`}
                     />
                   ))}
                 </div>
-                <span className="text-sm text-gray-600">{productDetails?.reviewCount} reviews</span>
+                <span className="text-sm text-gray-600">
+                  {productDetails?.reviewCount} reviews
+                </span>
               </div>
             </div>
           </div>
@@ -77,12 +134,14 @@ function ProductDetails({ open, setOpen, productDetails }) {
         <div className="mt-8 border-t pt-6">
           <h2 className="text-xl font-bold mb-4">Customer Reviews</h2>
           {/* Placeholder for reviews */}
-          <p className="text-gray-600 italic">No reviews yet. Be the first to review this product!</p>
+          <p className="text-gray-600 italic">
+            No reviews yet. Be the first to review this product!
+          </p>
         </div>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
-export default ProductDetails
+export default ProductDetails;
 

@@ -10,7 +10,6 @@ function CartWrapper({ cartItems }) {
     }, 0) 
   : 0;
 
-  console.log(cartItems);
   return (
     <SheetContent className="flex flex-col h-full">
       {/* Header (Fixed at Top) */}

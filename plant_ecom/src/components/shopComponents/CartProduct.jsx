@@ -1,7 +1,7 @@
 import React from "react";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { deleteCartItems } from "@/store/shopCartReducer";
+import { deleteCartItems, fetchCart, updateCartItemsQuantity } from "@/store/shopCartReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { useToast } from "@/hooks/use-toast";
 
@@ -21,16 +21,23 @@ const CartProduct = ({imageUrl, name, quantity, price, sellPrice, productId}) =>
       })
     }
 
-    console.log(response);
+    //console.log(response);
   }
 
-  function onDecrease(){
-    
+
+  async function handleCartQuantity({productId, action}){
+
+  const response = await dispatch(updateCartItemsQuantity({ userId:user.id, productId:productId, quantity: action === "plus" ? quantity+1 : quantity-1 }))
+  if (response.payload?.success){
+    toast({
+      title:"Quantity Updated"
+    })
+    dispatch(fetchCart(user.id))
   }
 
-  function onIncrease(){
-    
   }
+
+
 
   return (
     <div className="flex items-center space-x-4 py-4 border-b last:border-b-0 w-full">
@@ -41,11 +48,11 @@ const CartProduct = ({imageUrl, name, quantity, price, sellPrice, productId}) =>
         <h3 className="font-semibold text-lg">{name}</h3>
         <p className="text-sm text-gray-500">${sellPrice.toFixed(2)}</p>
         <div className="flex items-center mt-2">
-          <Button variant="outline" size="icon" onClick={onDecrease} disabled={quantity === 1}>
+          <Button variant="outline" size="icon" onClick={()=>handleCartQuantity({productId, action:"minus"})} disabled={quantity === 1}>
             <Minus className="h-4 w-4" />
           </Button>
           <span className="mx-2 font-semibold">{quantity}</span>
-          <Button variant="outline" size="icon" onClick={onIncrease}>
+          <Button variant="outline" size="icon" onClick={()=>handleCartQuantity({productId, action:"plus"})}>
             <Plus className="h-4 w-4" />
           </Button>
         </div>
