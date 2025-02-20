@@ -18,6 +18,8 @@ const shopProductsRouter = require("./routes/shop/shopProduct")
 
 const shopCartRouter = require("./routes/shop/cartRoute")
 
+const shopAddressRouter = require("./routes/shop/addressRoute");
+
 // api useage code 
 
 app.use(cors({
@@ -75,6 +77,7 @@ app.use("/api/shop/product", shopProductsRouter);
 
 app.use("/api/shop/cart", shopCartRouter)
 
+app.use("/api/shop/address", shopAddressRouter)
 
 
 
