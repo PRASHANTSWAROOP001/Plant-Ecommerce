@@ -1,79 +1,72 @@
-const Address = require("../../models/Address")
+const Address = require("../../models/Address");
 
-const addAddress = async (req, res)=>{
+const addAddress = async (req, res) => {
+  try {
+    const { userId, address, city, pincode, phone, notes } = req.body;
+     //console.log(userId, address, city, pincode, phone ,notes);
 
-    try {
-        
-        const{userId, address, city, pincode, phone , notes} = req.body
-        if(!userId || !address || !city || !pincode || !phone || !notes){
-            res.status(400).json({
-                success:false,
-                message:"missing data provided check sent data"
-            })
-        }
+    const newAddress = new Address({
+      userId,
+      address,
+      city,
+      pincode,
+      phone,
+      notes,
+    });
 
-    const newAddress = new Address({userId, address, city, pincode, phone, notes});
-
-    await newAddress.save();
-
-    return res.status(201).json({
+    const savedAddress = await newAddress.save();
+    res.status(201).json({
         success:true,
-        message: "address saved successfully"
-    })
+        message:"data saved successfully",
+        data: savedAddress
+    });
+  } catch (error) {
+    console.error("Error happened while saving the new address", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
 
-    } catch (error) {
+const editAddress = async (req, res) => {
+  try {
+    const { userId, addressId } = req.params;
+    const formData = req.body;
 
-        console.error("Error happend while saving the new address",error);
-        res.status(500).json({
-            success:false,
-            message:"error happend",
-            error
-        })
-        
+    // console.log(formData);
+
+    if (!userId || !addressId) {
+      return res.status(400).json({
+        success: false,
+        message: "userId and addressId both are required. Could be missing one."
+      });
     }
-}
 
+    const updatedAddress = await Address.findOneAndUpdate(
+      { _id: addressId, userId: userId },
+      formData,
+      { new: true }
+    );
 
-const editAddress = async (req, res)=>{
-    try {
-        
-        const {userId, addressId} = req.params;
-
-        const formData = req.body;
-
-        if (!userId || !addressId){
-            res.status(500).json({
-                success:false,
-                message: "userId and addressId both are required. could be missing one./"
-            })
-        }
-
-        const updatedAddress = await Address.findOneAndUpdate({
-            _id:addressId, userId: userId
-        },formData,{new:true})
-
-        if(!updatedAddress){
-            res.status(404).json({
-                success:false,
-                message:"Address could not be found for updation."
-            })
-        }else{
-            res.status(200).json({
-                success:true,
-                message:"address updated successfully"
-            })
-        }
-
-    } catch (error) {
-        console.error("Error happend while trying to update the address.");
-        
-        res.status(500).json({
-            success:false,
-            message:"Error happend while updating the address",
-            error
-        })
+    if (!updatedAddress) {
+      return res.status(404).json({
+        success: false,
+        message: "Address could not be found for updation."
+      });
     }
-}
+
+    res.status(200).json({
+      success: true,
+      message: "Address updated successfully",
+      data: updatedAddress
+    });
+  } catch (error) {
+    console.error("Error happened while trying to update the address.", error);
+    res.status(500).json({
+      success: false,
+      message: "Error happened while updating the address",
+      error
+    });
+  }
+};
 
 const deleteAddress = async (req, res)=>{
     try {
@@ -117,31 +110,19 @@ const deleteAddress = async (req, res)=>{
 
 
 const fetchAddress = async (req, res)=>{
+    
     try {
 
         const {userId} = req.params;
 
-        if(!userId){
-            res.status(400).json({
-                success:false,
-                message:"userId is missing for fetching data"
-            })
-        }
 
-
-        const addressList = await Address.findById({userId});
+        const addressList = await Address.find({userId:userId});
 
         res.status(200).json({
             success:true,
             data:addressList
         })
 
-        if(!addressList){
-            res.status(404).json({
-                success:false,
-                message:"Address could not be found for the user."
-            })
-        }
         
     } catch (error) {
         console.error("Error happend while fetching the address for the user", error);
@@ -155,4 +136,9 @@ const fetchAddress = async (req, res)=>{
     }
 }
 
-module.exports = {addAddress, deleteAddress, fetchAddress, editAddress}
+module.exports = {
+  addAddress,
+  deleteAddress,
+  editAddress,
+  fetchAddress,
+};

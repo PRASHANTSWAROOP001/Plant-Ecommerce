@@ -92,4 +92,41 @@ export const addProductFormElements = [
     "FloraRoots",
   ];
   
+
+ export const addAddressFormElements = [
+    {
+      label: "Address",
+      name: "address",
+      componentType: "textarea",
+      placeholder: "Enter address",
+    },
+    {
+      label: "City",
+      name: "city",
+      componentType: "input",
+      type: "text",
+      placeholder: "Enter city name",
+    },
+    {
+      label: "Pincode",
+      name: "pincode",
+      componentType: "input",
+      type: "text",
+      placeholder: "Enter pincode",
+    },
+    {
+      label: "Phone",
+      name: "phone",
+      componentType: "input",
+      type: "text",
+      placeholder: "Enter phone number",
+    },
+    {
+      label: "Notes",
+      name: "notes",
+      componentType: "textarea",
+      placeholder: "Enter additional notes (optional)",
+    },
+  ];
+  
   
