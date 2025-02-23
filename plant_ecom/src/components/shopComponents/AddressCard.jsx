@@ -36,7 +36,15 @@ function AddressCard() {
 
     const handleManageAddress =(e)=>{
         e.preventDefault()
-        if(currentEditId != null){
+        if(addressList && addressList.length >= 3){
+            toast({
+                title:"Can't Have More Than 3 Addresses",
+                variant:"destructive"
+            })
+            setFormData(initialAddress);
+            return;
+        }
+        else if(currentEditId != null){
             dispatch(editAddress({
                 userId:user.id,
                 addressId: currentEditId,
@@ -82,6 +90,7 @@ function AddressCard() {
 
     useEffect(()=>{
         dispatch(fetchAddress(user.id))
+        
     }, [])
 
 
@@ -113,18 +122,18 @@ function AddressCard() {
 
   return (
     <Card>
-        <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  md:grid-cols-3 gap-2">
+        <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
         {addressList && addressList.length > 0 ? addressList.map((address)=>(<AddressCardData key={address?._id} handleDeleteAddress={handleDeleteAddress} handleEditAddress={handleEditAddress} addressData={address} />)): null}
 
         </div>
        
 
         <CardHeader>
-            <CardTitle>Add Address </CardTitle>
+            <CardTitle>{currentEditId != null ? "Edit Address" : "Add Address"}</CardTitle>
         </CardHeader>
 
         <CardContent>
-            <CommonForm isBtnDisabled={!validForm()} formControls={addAddressFormElements}  formData={formData} setFormData={setFormData} buttonText={"Add"} onSubmit={handleManageAddress}></CommonForm>
+            <CommonForm isBtnDisabled={!validForm()} formControls={addAddressFormElements}  formData={formData} setFormData={setFormData} buttonText={currentEditId != null ? "Edit" : "Add"} onSubmit={handleManageAddress}></CommonForm>
         </CardContent>
     </Card>
   )

@@ -3,6 +3,7 @@ import React from 'react'
 import leafPhoto from "/leaf photos.jpg" 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import AddressCard from '@/components/shopComponents/AddressCard'
+import ShopOrders from './ShopOrders'
 
 function Account() {
   return (
@@ -21,7 +22,7 @@ function Account() {
             </TabsList>
 
             <TabsContent value="orders">
-               orders
+               <ShopOrders></ShopOrders>
             </TabsContent>
 
             <TabsContent value="address">

@@ -1,16 +1,17 @@
+import React from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { TableHeader, Table , TableHead, TableRow, TableBody, TableCell } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { Dialog } from '@/components/ui/dialog'
+import ShoppingOrderDetails from '@/components/shopComponents/ShoppingOrderDetails'
 import { useState } from 'react'
-import AdminOrderDetail from '@/components/adminComponents/AdminOrderDetail'
 
-function Orders() {
+function ShopOrders() {
     const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
   return (
     <Card>
         <CardHeader>
-            <CardTitle>All Orders History</CardTitle>
+            <CardTitle>Order History</CardTitle>
         </CardHeader>
         <CardContent>
 
@@ -46,7 +47,7 @@ function Orders() {
                         <TableCell>
                             <Dialog open={openDetailsDialog} onOpenChange={setOpenDetailsDialog}>
                             <Button onClick={()=>setOpenDetailsDialog(true)}> View Details</Button>
-                            <AdminOrderDetail></AdminOrderDetail>
+                             <ShoppingOrderDetails/>
                             </Dialog>
                         </TableCell>
                     </TableRow>
@@ -59,4 +60,4 @@ function Orders() {
   )
 }
 
-export default Orders
+export default ShopOrders

@@ -2,6 +2,7 @@ import React from "react";
 import { SheetContent, SheetTitle, SheetHeader } from "../ui/sheet";
 import { Button } from "../ui/button";
 import CartProduct from "./CartProduct";
+import { useNavigate } from "react-router-dom";
 
 function CartWrapper({ cartItems }) {
   let amount = cartItems && cartItems.length > 0 
@@ -9,6 +10,8 @@ function CartWrapper({ cartItems }) {
       return sum + (Math.min(cartItem.sellPrice, cartItem.price) * cartItem.quantity); 
     }, 0) 
   : 0;
+
+  const navigate = useNavigate()
 
   return (
     <SheetContent className="flex flex-col h-full">
@@ -45,7 +48,7 @@ function CartWrapper({ cartItems }) {
           <span>Total</span>
           <span>${amount}</span>
         </div>
-        <Button className="w-full mt-4">Checkout</Button>
+        <Button onClick={()=>navigate("/shop/checkout")}  className="w-full mt-4">Checkout</Button>
       </div>
     </SheetContent>
   );
