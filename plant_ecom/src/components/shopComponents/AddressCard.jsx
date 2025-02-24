@@ -24,7 +24,7 @@ const initialAddress = {
 
 
 
-function AddressCard() {
+function AddressCard({setCurrentAddressId}) {
 
     const [formData, setFormData] = useState(initialAddress);
     const [currentEditId, setCurrentEditId] = useState(null)
@@ -123,7 +123,7 @@ function AddressCard() {
   return (
     <Card>
         <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
-        {addressList && addressList.length > 0 ? addressList.map((address)=>(<AddressCardData key={address?._id} handleDeleteAddress={handleDeleteAddress} handleEditAddress={handleEditAddress} addressData={address} />)): null}
+        {addressList && addressList.length > 0 ? addressList.map((address)=>(<AddressCardData setCurrentAddressId={setCurrentAddressId} key={address?._id} handleDeleteAddress={handleDeleteAddress} handleEditAddress={handleEditAddress} addressData={address} />)): null}
 
         </div>
        

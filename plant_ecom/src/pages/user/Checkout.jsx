@@ -1,18 +1,62 @@
 import React from 'react'
 import leafPhoto from "/leaf photos.jpg"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import AddressCard from '@/components/shopComponents/AddressCard'
 import CartProduct from '@/components/shopComponents/CartProduct'
 import { Button } from '@/components/ui/button'
 
+
+import { useToast } from '@/hooks/use-toast'
+
+import { createNewOrder } from '@/store/shopOrderReducer'
+
 function Checkout() {
   const {cartItems} = useSelector((state)=>state.shopCart)
+  const {user} = useSelector((state)=>state.auth)
+  const {approvalURL} = useSelector((state)=>state.shopOrder);
+
+
+  const [isPaymentStart, setIsPaymentStart] = React.useState(false)
+
+  const dispatch = useDispatch();
+
+const {toast} = useToast();
+
+  const [currentAddressId, setCurrentAddressId] = React.useState(null);
+
 
   let amount = cartItems && cartItems.length > 0 
   ? cartItems.reduce((sum, cartItem) => { 
       return sum + (Math.min(cartItem.sellPrice, cartItem.price) * cartItem.quantity); 
     }, 0) 
-  : 0;
+  : 0;4
+
+  console.log("currentAddress selected: ", currentAddressId)
+
+
+  function handlePaypalPayment(){
+
+    if(currentAddressId == null){
+
+      toast({
+        title:"Please select one address. Click on One Address.",
+        variant:"destructive"
+      })
+    }
+
+    dispatch(createNewOrder({userId:user.id, addressId:currentAddressId, paymenMethod:"PayPal"})).then((data)=>{
+      if(data.pyaload?.success){
+        setIsPaymentStart(true);
+      }else{
+        setIsPaymentStart(false)
+      }
+    })
+
+  }
+
+  if (approvalURL){
+    window.location.href = approvalURL;
+  }
 
 
   return (
@@ -23,7 +67,7 @@ function Checkout() {
 
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5'>
 
-        <AddressCard></AddressCard>
+        <AddressCard setCurrentAddressId={setCurrentAddressId}></AddressCard>
 
           <div className='flex flex-col gap-5'>
 
@@ -52,7 +96,7 @@ function Checkout() {
                     <span>Total</span>
                     <span>${amount}</span>
                   </div>
-                  <Button  className="w-full mt-4">Checkout With Paypal</Button>
+                  <Button onClick = {handlePaypalPayment}  className="w-full mt-4">Checkout With Paypal</Button>
                 </div>
 
           </div>

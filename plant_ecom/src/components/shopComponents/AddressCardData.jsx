@@ -3,9 +3,9 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import { Label } from '../ui/label'
 import { Button } from '../ui/button'
 
-function AddressCardData({ addressData, handleDeleteAddress, handleEditAddress }) {
+function AddressCardData({ addressData, handleDeleteAddress, handleEditAddress,setCurrentAddressId }) {
   return (
-    <Card className="shadow-lg rounded-lg overflow-hidden">
+    <Card onClick={()=>setCurrentAddressId(addressData?._id)} className="shadow-lg rounded-lg cursor-pointer overflow-hidden">
       <CardContent className="p-6">
         <div className="grid gap-4">
           <div className="flex items-center">

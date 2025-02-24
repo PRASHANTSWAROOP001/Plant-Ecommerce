@@ -1,14 +1,15 @@
 const paypal = require("paypal-rest-sdk");
+require("dotenv").config(); // Ensure environment variables are loaded
 
-const clientId = process.env.CLIENT_ID
-const secret = process.env.SECRET
+// Check if credentials are provided
+if (!process.env.CLIENT_ID || !process.env.SECRET) {
+  console.error("PayPal credentials are missing!");
+}
 
 paypal.configure({
-    mode:"sandbox",
-    client_id:clientId,
-    client_secret:secret
-})
+  mode: process.env.PAYPAL_MODE || "sandbox", // Use "live" for production
+  client_id: process.env.CLIENT_ID,
+  client_secret: process.env.SECRET,
+});
 
-module.exports = paypal
-
-
+module.exports = paypal;

@@ -3,9 +3,17 @@ const Order = require("../../models/Order");
 const Cart = require("../../models/Cart");
 const Address = require("../../models/Address");
 
+/**
+ * @description Handles the creation of a new order.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const createOrder = async (req, res) => {
   try {
     const { userId, addressId, paymentMethod } = req.body;
+
+
+    console.log(req.body, "req.body")
 
     // Validate request data
     if (!userId || !addressId || !paymentMethod) {
@@ -40,7 +48,8 @@ const createOrder = async (req, res) => {
 
     // Create PayPal payment if payment method is PayPal
     let paymentId = null;
-    let payerId = null;
+    let approvalUrl = null;
+
     if (paymentMethod === "PayPal") {
       const createPaymentJson = {
         intent: "sale",
@@ -48,8 +57,8 @@ const createOrder = async (req, res) => {
           payment_method: "paypal"
         },
         redirect_urls: {
-          return_url: "http://localhost:5000/api/shop/order/success",
-          cancel_url: "http://localhost:5000/api/shop/order/cancel"
+          return_url: "http://localhost:5173/order/success",
+          cancel_url: "http://localhost:5173/order/cancel"
         },
         transactions: [{
           item_list: {
@@ -79,8 +88,15 @@ const createOrder = async (req, res) => {
         });
       });
 
+      console.log(payment, "payment");
+
       paymentId = payment.id;
-      payerId = payment.payer.payer_info.payer_id;
+
+      // Ensure approval URL exists before using it
+      const approvalLink = payment.links.find(link => link.rel === "approval_url");
+      if (approvalLink) {
+        approvalUrl = approvalLink.href;
+      }
     }
 
     // Create new order
@@ -108,32 +124,37 @@ const createOrder = async (req, res) => {
       orderDate: new Date(),
       orderUpdateDate: new Date(),
       paymentId,
-      payerId
+      payerId:" "
     });
 
     const savedOrder = await newOrder.save();
 
-    // Clear user's cart
-    await Cart.findOneAndUpdate({ userId }, { items: [] });
 
     res.status(201).json({
       success: true,
       message: "Order created successfully",
-      data: savedOrder
+      data: savedOrder,
+      approvalUrl,
+      orderId: savedOrder._id
     });
+
+    
   } catch (error) {
     console.error("Error happened while creating the order", error);
     res.status(500).json({
       success: false,
       message: "Internal server error",
-      error
+      error: error.message
     });
   }
 };
 
 
-
-
+/**
+ * @description Handles the capture of a PayPal payment.
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object.
+ */
 const capturePayment = async (req, res) => {
   try {
     const { paymentId, payerId } = req.body;
@@ -178,6 +199,11 @@ const capturePayment = async (req, res) => {
         message: "Order not found."
       });
     }
+
+    const userId = updatedOrder.userId;
+
+    const cart = await Cart.findOneAndUpdate({userId}, {items:[]}); //empty the cart after successfull order
+
 
     res.status(200).json({
       success: true,
