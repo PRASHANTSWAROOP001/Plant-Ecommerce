@@ -6,6 +6,7 @@ import shopProductReducer from "./shopProductReducer"
 import shopCartReducer from "./shopCartReducer"
 import shopAddressReducer from "./shopAddressReducer"
 import shopOrderReducer from "./shopOrderReducer"
+import AdminOrderReducer from "./adminOrderReducer"
 
 const store = configureStore({
     reducer:{
@@ -14,7 +15,8 @@ const store = configureStore({
         shopProduct: shopProductReducer,
         shopCart: shopCartReducer,
         shopAddress: shopAddressReducer,
-        shopOrder: shopOrderReducer
+        shopOrder: shopOrderReducer,
+        adminOrder: AdminOrderReducer
     }
 })
 

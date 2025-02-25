@@ -22,6 +22,8 @@ const shopAddressRouter = require("./routes/shop/addressRoute");
 
 const shopOrderRouter = require("./routes/shop/orderRouter");
 
+const adminOrderRoutes = require("./routes/admin/adminOrderRoutes")
+
 // api useage code 
 
 app.use(cors({
@@ -83,6 +85,7 @@ app.use("/api/shop/address", shopAddressRouter)
 
 app.use("/api/shop/order", shopOrderRouter);
 
+app.use("/api/admin/order", adminOrderRoutes);
 
 
 
