@@ -1,15 +1,13 @@
 import React from "react";
 import { Link, NavLink, Outlet,useNavigate} from "react-router-dom";
 import {
-  Facebook,
-  Instagram,
-  Twitter,
   ShoppingCart,
   User,
   Menu,
   X,
   Settings,
-  LogOut
+  LogOut,
+  Barcode
 } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { Avatar,AvatarFallback } from "../ui/avatar";
@@ -27,6 +25,7 @@ import {
 import { logoutUser } from "@/store/authReducer";
 import CartWrapper from "./CartWrapper";
 import { fetchCart } from "@/store/shopCartReducer";
+
 
 function ShopLayout() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -137,8 +136,8 @@ function ShopLayout() {
           <DropdownMenuContent align="end" className="w-48 bg-white shadow-md">
             {/* Account Info */}
             <DropdownMenuItem onSelect={navigateToAcccount}>
-              <User className="mr-2 h-4 w-4 text-gray-500" />
-              Account
+              <User className="mr-2 h-4 w-4 text-pink-500" />
+              <span className="text-pink-500">Account </span> 
             </DropdownMenuItem>
 
             {/* Settings Page */}
@@ -147,12 +146,17 @@ function ShopLayout() {
               Settings
             </DropdownMenuItem>
 
+            <DropdownMenuItem onSelect={() =>navigate("/shop/checkout")}>
+              <Barcode className="mr-2 h-4 w-4 text-green-500" />
+               <span className="text-green-500"> Checkout </span> 
+            </DropdownMenuItem>
+
             <DropdownMenuSeparator />
 
             {/* Logout */}
             <DropdownMenuItem onSelect={handleLogout}>
-              <LogOut className="mr-2 h-4 w-4 text-gray-500" />
-              Logout
+              <LogOut className="mr-2 h-4 w-4 text-red-500" />
+              <span className="text-red-500"> Logout </span> 
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -169,7 +173,7 @@ function ShopLayout() {
 
       {isMenuOpen && (
         <div className="md:hidden bg-white shadow-md rounded-b-lg py-4 px-6">
-          <ul className="space-y-4 text-center">
+          <ul className="space-y-2 text-center">
             {["Home", "Product", "Contact", "About"].map((item) => (
               <li key={item} className="w-full">
                 <Link
@@ -185,18 +189,7 @@ function ShopLayout() {
 
           <div className="pt-4 border-t border-gray-200 mt-4">
             <Link
-              to="/account"
-              className="flex items-center justify-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
-              onClick={toggleMenu}
-            >
-              <User size={20} />
-              <span>Login</span>
-            </Link>
-          </div>
-
-          <div className="mt-4">
-            <Link
-              to="/cart"
+              to="/shop/checkout"
               className="flex items-center justify-center space-x-2 text-gray-700 hover:text-gray-900 transition-colors"
               onClick={toggleMenu}
             >
@@ -204,6 +197,12 @@ function ShopLayout() {
               <span>Cart</span>
             </Link>
           </div>
+
+          <div className="flex items-center justify-center mt-4">
+           <Button onClick={handleLogout} variant='destructive' size='icon'><LogOut size={20}/></Button>
+          </div>
+
+          
         </div>
       )}
 

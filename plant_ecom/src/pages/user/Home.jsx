@@ -95,14 +95,14 @@ function Home() {
         {/* Product Section */}
 
         <div className="flex flex-col gap-2 items-center justify-center text-center">
-          <h1 className="text-4xl font-bold text-green-700 mb-2">
-            Shop Plants by Category
+          <h1 className="text-4xl font-bold text-green-600 mb-2">
+            Transform Your Space with Living Beauty
           </h1>
-          <h2 className="text-xl font-medium text-gray-600 max-w-2xl">
-            Discover the perfect plant for your space. Explore our wide variety
-            of plants and accessories, and bring nature into your home with
-            ease.
-          </h2>
+          <p className="text-base md:text-lg font-medium  text-gray-700 max-w-2xl">
+            Curated collection of air-purifying companions and mood-boosting botanicals. 
+            Whether you're a seasoned plant parent or just starting your green journey, 
+            find your perfect match in our carefully nurtured selection.
+          </p>
         </div>
 
         <div className="w-full grid md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-4">
@@ -146,7 +146,7 @@ function Home() {
               <div className="flex justify-between">
                 <span className="block font-semibold text-xl">Money Plant</span>
                 <span className=" bg-white rounded-full text-orange-500 text-xs font-bold px-3 py-2 leading-none flex items-center">
-                  144
+                  60+ Plants
                 </span>
               </div>
             </CardContent>
@@ -192,7 +192,7 @@ function Home() {
               <div className="flex justify-between">
                 <span className="block font-semibold text-xl">Basil</span>
                 <span className=" bg-white rounded-full text-teal-500 text-xs font-bold px-3 py-2 leading-none flex items-center">
-                  $36.00
+                  100+ Plants
                 </span>
               </div>
             </CardContent>
@@ -236,14 +236,14 @@ function Home() {
             <CardContent className="px-6 pb-6 mt-6 text-white">
               <span className="block opacity-75 -mb-1">Flowering</span>
               <div className="flex justify-between">
-                <span className="block font-semibold text-xl">Rose</span>
+                <span className="block font-semibold text-xl">Tulip</span>
                 <span className=" bg-white rounded-full text-purple-500 text-xs font-bold px-3 py-2 leading-none flex items-center">
-                  $36.00
+                  30+ Flowers
                 </span>
               </div>
             </CardContent>
           </Card>
-          <Card  onClick={()=>handleNavigateToProduct("succulents")} className="max-w-xs cursor-pointer rounded-lg overflow-hidden shadow-lg bg-purple-500 group relative m-6">
+          <Card  onClick={()=>handleNavigateToProduct("succulents")} className="max-w-xs cursor-pointer rounded-lg overflow-hidden shadow-lg bg-pink-500 group relative m-6">
             {/* Background SVG */}
             <div className="absolute bottom-0 left-0 mb-8 scale-150 group-hover:scale-[1.65] transition-transform">
               <svg className="opacity-10" viewBox="0 0 375 283" fill="none">
@@ -271,7 +271,7 @@ function Home() {
             <CardHeader className="relative pt-10 px-10 flex items-center justify-center group-hover:scale-110 transition-transform">
               <div className="absolute w-48 h-48 bottom-0 left-0 -mb-24 ml-3 bg-[radial-gradient(black,transparent_60%)] opacity-20 transform rotate-[20deg] scale-y-[0.6]"></div>
               <img
-                src="/Tulip.png"
+                src="/succulent-plant.png"
                 alt="Plant Image"
                 className="relative w-40"
               />
@@ -281,9 +281,9 @@ function Home() {
             <CardContent className="px-6 pb-6 mt-6 text-white">
               <span className="block opacity-75 -mb-1">Succulent</span>
               <div className="flex justify-between">
-                <span className="block font-semibold text-xl">Rose</span>
-                <span className=" bg-white rounded-full text-purple-500 text-xs font-bold px-3 py-2 leading-none flex items-center">
-                  $36.00
+                <span className="block font-semibold text-xl">Aloe Vera</span>
+                <span className=" bg-white rounded-full text-pink-500 text-xs font-bold px-3 py-2 leading-none flex items-center">
+                  15+ Succulents
                 </span>
               </div>
             </CardContent>
@@ -332,70 +332,66 @@ function Home() {
         </div>
 
         <div className="flex flex-col gap-3 justify-center items-center pb-10 pt-5">
-          <p className="text-xl sm:text-2xl text-gray-200">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          <p className="text-xl sm:text-2xl text-center">
+            "Plants make people happy. Let us prove it to you."
+            <br />
+            - Join 100+ Happy Plant Parents
           </p>
 
           <Link to="/shop/product">
             <Button variant="secondary" className="flex gap-2">
-              <span>Explore</span> <MoveRight />
+              <span>Start Your Plant Journey</span> <MoveRight />
             </Button>
           </Link>
         </div>
       </div>
 
       <section className="w-full">
-        {/* Container */}
         <div className="mx-auto w-full max-w-7xl px-5 py-16 md:px-10 md:py-20">
-          {/* Title */}
           <div className="flex flex-col items-center text-center">
             <h2 className="text-3xl font-bold md:text-5xl">
-              Make every step user-centric
+              Cultivating Exceptional Experiences
             </h2>
-            <p className="mb-8 mt-4 max-w-lg text-base text-gray-500 md:mb-12 md:text-lg lg:mb-16">
-              Lorem ipsum dolor sit amet consectetur adipiscing elit ut aliquam,
-              purus sit amet luctus magna fringilla urna
+            <p className="mb-8 mt-4 max-w-lg text-base text-gray-700 md:mb-12 md:text-lg lg:mb-16">
+              From our greenhouse to your home - a seamless journey with expert guidance 
+              at every step
             </p>
           </div>
-          {/* Content */}
           <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 md:gap-4 lg:gap-6">
-            {/* Item */}
             <div className="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
               <img
                 src="/support.png"
-                alt="support icon"
-                className="inline-block h-16 w-16 object-cover rounded-full "
+                alt="24/7 support icon"
+                className="inline-block h-16 w-16 object-cover rounded-full"
               />
-              <h3 className="text-xl font-semibold"> 24/7 Support</h3>
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit ut
-                aliquam, purus sit.
+              <h3 className="text-xl font-semibold">Plant Parenthood Support</h3>
+              <p className="text-sm text-gray-700">
+                Real horticulturists available round-the-clock. Get care tips, 
+                troubleshoot issues, or just share plant photos - we're always growing with you.
               </p>
             </div>
-            {/* Item */}
             <div className="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
               <img
                 src="/potted-plant_.png"
-                alt="plant icon"
-                className="inline-block h-16 w-16 object-cover rounded-full "
+                alt="Plant variety icon"
+                className="inline-block h-16 w-16 object-cover rounded-full"
               />
-              <h3 className="text-xl font-semibold"> Wide Variety </h3>
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit ut
-                aliquam, purus sit.
+              <h3 className="text-xl font-semibold">500+ Green Companions</h3>
+              <p className="text-sm text-gray-700">
+                From tropical rarities to desert jewels. Each plant comes with 
+                a detailed care passport and lifetime support.
               </p>
             </div>
-            {/* Features Item */}
             <div className="grid gap-6 rounded-md border border-solid border-gray-300 p-8 md:p-10">
               <img
                 src="/package_.png"
-                alt="package icon"
-                className="inline-block h-16 w-16 object-cover rounded-full "
+                alt="Fast shipping icon"
+                className="inline-block h-16 w-16 object-cover rounded-full"
               />
-              <h3 className="text-xl font-semibold">Fast Shipping</h3>
-              <p className="text-sm text-gray-500">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit ut
-                aliquam, purus sit.
+              <h3 className="text-xl font-semibold">Climate-Safe Delivery</h3>
+              <p className="text-sm text-gray-700">
+                Arriving in 2-5 days via eco-friendly packaging. Every plant 
+                comes with our 10-day health guarantee.
               </p>
             </div>
           </div>
