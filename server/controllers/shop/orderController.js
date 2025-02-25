@@ -107,7 +107,9 @@ const createOrder = async (req, res) => {
         name: item.productId.name,
         image: item.productId.imageUrl[0],
         price: item.productId.price,
-        sellPrice: item.productId.sellPrice
+        sellPrice: item.productId.sellPrice,
+        quantity:item.quantity,
+
       })),
       addressInfo: {
         addressId: address._id.toString(),
@@ -188,6 +190,7 @@ const capturePayment = async (req, res) => {
       {
         orderStatus: "Confirmed",
         paymentStatus: "Paid",
+        payerId:payerId,
         orderUpdateDate: new Date()
       },
       { new: true }
@@ -220,7 +223,89 @@ const capturePayment = async (req, res) => {
   }
 };
 
+
+
+const getAllOrdersByUserId = async(req,res)=>{
+
+  try {
+
+    const {userId} = req.params;
+
+    if(!userId){
+      return res.status(400).json({
+        success:false,
+        message:"Please send the userId. To fetch user orders"
+      })
+    }
+
+    const order = await Order.find({userId});
+
+    if(!order.length){
+      return res.status(404).json({
+        success:false,
+        message:"No order could be found."
+      })
+    }
+    else{
+      return res.status(201).json({
+        success:true,
+        data:order
+      })
+    }
+    
+  } catch (error) {
+
+    console.error("Error happend while fetching the orders for user");
+
+    return res.status(500).json({
+      success:false,
+      message:"Error happend while fetching the orders for user",
+      error
+    })
+    
+  }
+
+}
+
+const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        message: "Order Details Cant Be Found Without order id"
+      });
+    }
+
+    // 🔥 Add await to get the document (not a Query object)
+    const order = await Order.findById(id).exec(); // <-- fix here
+
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: "Particular Order Could Not Be Found."
+      });
+    }
+
+    // ✅ Mongoose documents have circular structures. Convert to a plain object
+    return res.status(200).json({ // <-- 201 is for creation, use 200
+      success: true,
+      data: order.toObject({ getters: true }) // converts Mongoose doc to plain JS object
+    });
+
+  } catch (error) {
+    console.error("Error:", error);
+    return res.status(500).json({ // <-- 501 is "Not Implemented", use 500
+      success: false,
+      message: "Error fetching order",
+      error: error.message // Send error message instead of the full error object
+    });
+  }
+};
+
 module.exports = {
   createOrder,
-  capturePayment
+  capturePayment,
+  getAllOrdersByUserId,
+  getOrderDetails
 };

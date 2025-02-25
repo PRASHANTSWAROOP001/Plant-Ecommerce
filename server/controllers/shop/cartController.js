@@ -71,26 +71,22 @@ const fetchCart = async (req, res) => {
       select: "imageUrl name price sellPrice",
     });
 
-    // there is this populate method which uses reference keys and pulls our relevenat data using that object key
-    // this way we dont have to store redundant data everywhere.
-
     if (!cart) {
-      return res.status(400).json({
+      return res.status(404).json({
         success: false,
-        message: "cart not avilable for user.",
+        message: "Cart not available for user.",
       });
     }
 
-    const validItems = cart.items.filter((productItem) => productItem.id); // deleting all such elements which do not have valid productId
+    const validItems = cart.items.filter((productItem) => productItem.productId); // deleting all such elements which do not have valid productId
 
     if (validItems.length < cart.items.length) {
-      // since we deleted/eliminated invalidItems now our validItems.lenght < cart.items.length
-      cart.items = validItems; //so we save the valid items
+      // since we deleted/eliminated invalidItems now our validItems.length < cart.items.length
+      cart.items = validItems; // so we save the valid items
       await cart.save();
     }
 
-    // here in the below code block we are using poulated values structuring them and sending the data in a easier format
-
+    // here in the below code block we are using populated values structuring them and sending the data in an easier format
     const populateCartItems = validItems.map((item) => ({
       productId: item.productId._id,
       imageUrl: item.productId.imageUrl,
@@ -108,11 +104,11 @@ const fetchCart = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("Error happend while fetching cart data:", error);
+    console.error("Error happened while fetching cart data:", error);
 
-    res.json(500).json({
+    res.status(500).json({
       success: false,
-      message: "Error happend while fetching cart items",
+      message: "Error happened while fetching cart items",
       error,
     });
   }
