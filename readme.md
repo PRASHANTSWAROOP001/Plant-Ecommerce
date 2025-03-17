@@ -1,84 +1,118 @@
-# Plant Ecom
+# Green Thumb - Plant E-commerce Application
 
-Plant Ecom is an e-commerce platform for buying and selling plants and plant accessories. This project is built using React and Vite, with a focus on providing a user-friendly interface and seamless user experience.
+Green Thumb is a full-stack plant e-commerce application that provides a seamless shopping experience for plant lovers. This app supports role-based access, secure authentication, and an intuitive UI for both users and admins.
 
 ## Features
 
-- **User Interface**: Responsive design with Tailwind CSS.
-- **Product Management**: Admin panel for adding, editing, and deleting products.
-- **Image Upload**: Upload and manage product images.
-- **Notifications**: Toast notifications for user actions.
-- **Routing**: Client-side routing with React Router.
+### User Features:
+- **Browse Plants**: View available plants with details and images.
+- **Add to Cart**: Easily add plants to the shopping cart.
+- **Checkout**: Users can store up to **three addresses** and select one at checkout.
+- **Secure Payments**: Integrated **Sandbox PayPal** for transactions.
+- **Real-time Notifications**: Uses **Toast component** for instant feedback.
+- **Responsive UI**: Fully optimized for all devices.
+
+### Admin Features:
+- **Product Management**: Create, update, and delete products.
+- **Order Management**: Track, update, and manage orders efficiently.
+- **Role-Based Access**: Uses **JWT tokens** for secure authentication.
 
 ## Tech Stack
 
-- **Frontend**: React, Tailwind CSS
-- **State Management**: Redux Toolkit
-- **HTTP Client**: Axios
-- **Icons**: Lucide React
-- **Build Tool**: Vite
+### Frontend:
+- **React.js**: Component-based UI development.
+- **Tailwind CSS**: Utility-first styling.
+- **Shadcn UI**: Prebuilt and customizable components.
+- **React Redux**: State management.
 
-## Getting Started
+### Backend:
+- **Node.js & Express.js**: Server-side logic and API routes.
+- **MongoDB**: NoSQL database for storing user and product data.
+- **JWT Authentication**: Secure authentication and role-based access control.
 
-### Prerequisites
+## Installation & Setup
 
-- Node.js
-- npm or yarn
+### Prerequisites:
+- Node.js installed
+- MongoDB setup (cloud-based)
+- PayPal Developer Account for sandbox testing
 
-### Installation
+### Steps to Run Locally:
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/yourusername/plant-ecom.git
-    ```
-2. Navigate to the project directory:
-    ```sh
-    cd plant-ecom
-    ```
-3. Install dependencies:
-    ```sh
-    npm install
-    ```
-    or
-    ```sh
-    yarn install
-    ```
+#### 1. Clone the Repository:
+```sh
+git clone https://github.com/your-username/green-thumb.git
+cd green-thumb
+```
 
-### Running the Application
+#### 2. Install Dependencies:
+```sh
+# Install frontend dependencies
+cd client
+npm install
 
-1. Start the development server:
-    ```sh
-    npm run dev
-    ```
-    or
-    ```sh
-    yarn dev
-    ```
-2. Open your browser and navigate to `http://localhost:3000`.
+# Install backend dependencies
+cd ../server
+npm install
+```
 
-### Building for Production
+#### 3. Set Up Environment Variables:
+Create a `.env` file in the `server` directory and add:
+```env
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+PAYPAL_CLIENT_ID=your_paypal_sandbox_client_id
+```
 
-1. Build the application:
-    ```sh
-    npm run build
-    ```
-    or
-    ```sh
-    yarn build
-    ```
-2. Preview the production build:
-    ```sh
-    npm run preview
-    ```
-    or
-    ```sh
-    yarn preview
-    ```
+#### 4. Run the Application:
+```sh
+# Start backend
+cd server
+npm start
 
-## Contributing
+# Start frontend
+cd client
+npm start
+```
 
-Contributions are welcome! Please open an issue or submit a pull request.
+The app will be available at `http://localhost:3000`.
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|------------|-----------------------------|
+| POST | `/api/auth/login` | User login with JWT authentication |
+| POST | `/api/auth/register` | User registration |
+| GET | `/api/products` | Fetch all products |
+| POST | `/api/admin/products` | Add a new product (Admin only) |
+| PUT | `/api/admin/orders/:id` | Update order status (Admin only) |
+
+## Folder Structure
+```
+Green-Thumb/
+│── client/         # React Frontend
+│── server/         # Express Backend
+│── models/         # MongoDB Schemas
+│── routes/         # API Endpoints
+│── controllers/    # Business Logic
+│── middleware/     # Authentication & Security
+│── .env.example    # Example Environment Variables
+│── README.md       # Documentation
+```
+
+## Future Enhancements
+- **Deploy to Production** (e.g., Vercel & Render)
+- **Add More Payment Options** (Stripe, Razorpay, etc.)
+- **Wishlist Feature** for Users
+- **Admin Dashboard Analytics**
+- **More Enhanced shopping cart UI**
+
+## Contribution
+Feel free to open an issue or submit a pull request to contribute.
 
 ## License
-
 This project is licensed under the MIT License.
+
+---
+
+
