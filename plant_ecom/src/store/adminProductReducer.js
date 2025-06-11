@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../api/configedAxios";
 
 // Initial state
 const initialState = {
@@ -13,7 +13,7 @@ export const fetchAllProducts = createAsyncThunk(
   "admin/fetchAllProduct",
   async (_, { rejectWithValue }) => {
     try {
-      const result = await axios.get("http://localhost:5000/api/admin/get");
+      const result = await axios.get("/api/admin/get");
       console.log("fetched data response: ", result.data)
       return result?.data;
     } catch (error) {
@@ -28,7 +28,7 @@ export const addProduct = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const result = await axios.post(
-        "http://localhost:5000/api/admin/add", 
+        "/api/admin/add", 
         formData, 
         {
           headers: {
@@ -51,7 +51,7 @@ export const deleteProduct = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const result = await axios.delete(
-        `http://localhost:5000/api/admin/delete/${id}`, 
+        `/api/admin/delete/${id}`, 
         {
           headers: {
             "Content-Type": "application/json"
@@ -71,7 +71,7 @@ export const editProduct = createAsyncThunk(
   async ({ id, formData }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `http://localhost:5000/api/admin/edit/${id}`, // Corrected endpoint
+        `/api/admin/edit/${id}`, // Corrected endpoint
         formData,
         {
           headers: {

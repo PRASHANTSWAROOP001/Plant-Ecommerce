@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
+import axios from "../api/configedAxios";
 
 const initialState = {
     isLoading: false,
@@ -8,7 +8,7 @@ const initialState = {
 
 export const addToCart = createAsyncThunk("cart/addToCart", async ({ userId, productId, quantity }) => {
     try {
-        const response = await axios.post(`http://localhost:5000/api/shop/cart/add`, {
+        const response = await axios.post(`/api/shop/cart/add`, {
             userId,
             productId,
             quantity
@@ -22,7 +22,7 @@ export const addToCart = createAsyncThunk("cart/addToCart", async ({ userId, pro
 
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
     try {
-        const response = await axios.get(`http://localhost:5000/api/shop/cart/get/${userId}`);
+        const response = await axios.get(`/api/shop/cart/get/${userId}`);
         console.log("fetch cart response.data value",response.data);
         return response.data;
     } catch (error) {
@@ -33,7 +33,7 @@ export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId) => {
 
 export const updateCartItemsQuantity = createAsyncThunk("cart/updateCartItems", async ({ userId, productId, quantity }) => {
     try {
-        const response = await axios.put(`http://localhost:5000/api/shop/cart/update-cart`, {
+        const response = await axios.put(`/api/shop/cart/update-cart`, {
             userId,
             productId,
             quantity
@@ -48,7 +48,7 @@ export const updateCartItemsQuantity = createAsyncThunk("cart/updateCartItems", 
 export const deleteCartItems = createAsyncThunk("cart/deleteCartItems", async ({ userId, productId }) => {
     try {
         console.log("userid,productid", userId,productId )
-        const response = await axios.delete(`http://localhost:5000/api/shop/cart/${userId}/${productId}`);
+        const response = await axios.delete(`/api/shop/cart/${userId}/${productId}`);
         return response.data;
     } catch (error) {
         console.error("Error happened at the deleteCartItems", error);

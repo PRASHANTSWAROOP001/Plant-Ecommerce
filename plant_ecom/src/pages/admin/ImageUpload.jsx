@@ -7,7 +7,7 @@ import React, { useRef, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import axios from "axios";
+import axios from "../../api/configedAxios";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ProductImageUpload({
@@ -60,7 +60,7 @@ export default function ProductImageUpload({
     try {
       setImageLoadingState(true)
       const response = await axios.post(
-        "http://localhost:5000/api/admin/upload-image",
+        "/api/admin/upload-image",
         data,
         {
           headers: {

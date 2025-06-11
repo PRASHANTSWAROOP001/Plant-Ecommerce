@@ -10,6 +10,13 @@ const cookieParser = require("cookie-parser")
 
 // router imports
 
+const allowed_origin = process.env.ALLOWED_ORIGIN;
+
+if(!allowed_origin){
+    console.log("added origin for cors setup");
+    process.exit(1);
+}
+
 const authRouter = require("./routes/auth_routes")
 
 const adminProductsRouter = require("./routes/admin/admin_productRoute")
@@ -27,7 +34,7 @@ const adminOrderRoutes = require("./routes/admin/adminOrderRoutes")
 // api useage code 
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: allowed_origin,
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"], // Add OPTIONS
     allowedHeaders: [
         "Content-Type",
