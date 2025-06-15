@@ -1,19 +1,17 @@
 import ProductDetails from "@/components/shopComponents/ProductDetails";
 import ShopTile from "@/components/shopComponents/ShopTile";
-import { fetchAllFilteredProdcuts, fetchProdctDetails } from "@/store/shopProductReducer";
+import {
+  fetchAllFilteredProdcuts,
+  fetchProdctDetails,
+} from "@/store/shopProductReducer";
 import { addToCart, fetchCart } from "@/store/shopCartReducer";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import { useNavigate } from "react-router-dom";
 
-const categories = [
-  "indoor",
-  "outdoor",
-  "succulents",
-  "flowering",
-  "herbs",
-];
+const categories = ["indoor", "outdoor", "succulents", "flowering", "herbs"];
 
 const brands = [
   "GreenThumb Co.",
@@ -26,24 +24,23 @@ const brands = [
   "FloraRoots",
 ];
 
-
-function createSearchParamsHelper(params){
+function createSearchParamsHelper(params) {
   //creates the string for params like category="men"....
-  let query = []
-  for(const [key,value] of Object.entries(params)){
-    if(Array.isArray(value) && value.length > 0){
-      query.push(`${key}=${encodeURIComponent(value.join(","))}`)
-    }
-    else if (value) {
-      query.push(`${key}=${encodeURIComponent(value)}`)
-
+  let query = [];
+  for (const [key, value] of Object.entries(params)) {
+    if (Array.isArray(value) && value.length > 0) {
+      query.push(`${key}=${encodeURIComponent(value.join(","))}`);
+    } else if (value) {
+      query.push(`${key}=${encodeURIComponent(value)}`);
     }
   }
 
-  return query.join("&")
+  return query.join("&");
 }
 
 function App() {
+  const navigate = useNavigate();
+
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [selectedCategory, setSelectedCategory] = useState(() => {
@@ -58,31 +55,31 @@ function App() {
     return JSON.parse(sessionStorage.getItem("sortOption")) || "price-asc";
   });
 
-  const [searchParams, setSearchParams] = useSearchParams()
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-  const { productList, productDetails} = useSelector((state) => state.shopProduct);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProduct
+  );
 
-  const {user} = useSelector((state)=> state.auth)
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
-  const {toast} = useToast()
-
-
+  const { toast } = useToast();
 
   const dispatch = useDispatch();
 
   console.log("Product list shopping side: ", productList);
 
   useEffect(() => {
-    const params = Object.fromEntries([...searchParams])
+    const params = Object.fromEntries([...searchParams]);
     const filters = {
-      "category":params.category ? params.category.split(","):[],
-      "brand":params.brand ? params.brand.split(","):[],
-      "sort": params.sort || "price-asc"
-    }
+      category: params.category ? params.category.split(",") : [],
+      brand: params.brand ? params.brand.split(",") : [],
+      sort: params.sort || "price-asc",
+    };
     dispatch(fetchAllFilteredProdcuts(filters));
   }, [dispatch, searchParams]);
 
@@ -95,27 +92,22 @@ function App() {
     sessionStorage.setItem("sortOption", JSON.stringify(sortOption));
   }, [selectedBrands, selectedCategory, sortOption]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const filters = {
-      "category": selectedCategory,
-      "brand": selectedBrands,
-      "sort": sortOption
+      category: selectedCategory,
+      brand: selectedBrands,
+      sort: sortOption,
+    };
+
+    let queryString = createSearchParamsHelper(filters);
+    setSearchParams(new URLSearchParams(queryString));
+  }, [selectedBrands, selectedCategory, sortOption]);
+
+  useEffect(() => {
+    if (productDetails != null) {
+      setOpenDetailsDialog(true);
     }
-
-    let queryString = createSearchParamsHelper(filters)
-    setSearchParams(new URLSearchParams(queryString))
-
-  },[selectedBrands, selectedCategory, sortOption])
-
-
-  useEffect(()=>{
-
-    if (productDetails != null){
-      setOpenDetailsDialog(true)
-    }
-
-  },[productDetails])
+  }, [productDetails]);
 
   // console.log(
   //   "filters in order: sortOptions, toggleBrands, toggleCategory",
@@ -138,29 +130,36 @@ function App() {
     );
   };
 
-
-  function handleGetProductDetails(getCurrId){
+  function handleGetProductDetails(getCurrId) {
     // console.log(getCurrId);
-    dispatch(fetchProdctDetails(getCurrId))
+    dispatch(fetchProdctDetails(getCurrId));
   }
 
-  function handleAddToCart(currProductId){
+  function handleAddToCart(currProductId) {
     // console.log(currProductId);
 
-    dispatch(addToCart({ userId:user.id, productId:currProductId, quantity:1 })).then((data)=>{
-      if(data.payload?.success){
-        toast({
-          title:"Product Added To Cart",
-        })
+    if (!user) {
+      toast({
+        title: "Please login to add to cart.",
+      });
 
-        dispatch(fetchCart(user?.id)).then((data)=>{
-          console.log(data);
-        })
+      navigate("/auth/login");
     }
-    })
-    
-  }
 
+    dispatch(
+      addToCart({ userId: user.id, productId: currProductId, quantity: 1 })
+    ).then((data) => {
+      if (data.payload?.success) {
+        toast({
+          title: "Product Added To Cart",
+        });
+
+        dispatch(fetchCart(user?.id)).then((data) => {
+          console.log(data);
+        });
+      }
+    });
+  }
 
   // console.log("fetchedDetailed Product: ", productDetails)
 
@@ -229,7 +228,6 @@ function App() {
                 onChange={(e) => setSortOption(e.target.value)}
                 className="block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-emerald-500 focus:border-emerald-500 sm:text-sm rounded-md"
               >
-                
                 <option value="price-asc">Price: Low to High</option>
                 <option value="price-desc">Price: High to Low</option>
                 <option value="name-asc">Name: A to Z</option>
@@ -240,11 +238,20 @@ function App() {
             {/* Product Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               {productList.map((product) => (
-                <ShopTile handleAddToCart={handleAddToCart} handleGetProductDetails={handleGetProductDetails} key={product._id} product={product} />
+                <ShopTile
+                  handleAddToCart={handleAddToCart}
+                  handleGetProductDetails={handleGetProductDetails}
+                  key={product._id}
+                  product={product}
+                />
               ))}
             </div>
 
-            <ProductDetails open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails}></ProductDetails>
+            <ProductDetails
+              open={openDetailsDialog}
+              setOpen={setOpenDetailsDialog}
+              productDetails={productDetails}
+            ></ProductDetails>
           </div>
         </main>
       </div>

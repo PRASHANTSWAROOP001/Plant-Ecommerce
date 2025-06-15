@@ -22,7 +22,6 @@ import { checkAuth } from "./store/authReducer";
 import PaypalReturn from "./pages/user/PaypalReturn";
 import PaypalCancel from "./pages/user/PaypalCancel";
 
-
 function App() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
 
@@ -62,23 +61,9 @@ function App() {
             }
           />
 
-          <Route
-            path="home"
-            element={
-              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <Home />
-              </CheckAuth>
-            }
-          />
+          <Route path="home" element={<Home />} />
 
-          <Route
-            path="product"
-            element={
-              <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-                <Product />
-              </CheckAuth>
-            }
-          />
+          <Route path="product" element={<Product />} />
 
           <Route
             path="account"
@@ -97,17 +82,17 @@ function App() {
               <Authlayout />
             </CheckAuth>
           }
-        > 
+        >
           <Route path="login" element={<Login />} />
           <Route path="registration" element={<Registration />} />
         </Route>
 
         <Route path="*" element={<Notfound />} />
 
-         <Route path="order">
-            <Route path="success" element={<PaypalReturn />} />
-            <Route path="cancel" element={<PaypalCancel />} />
-          </Route>
+        <Route path="order">
+          <Route path="success" element={<PaypalReturn />} />
+          <Route path="cancel" element={<PaypalCancel />} />
+        </Route>
       </Routes>
     </div>
   );
