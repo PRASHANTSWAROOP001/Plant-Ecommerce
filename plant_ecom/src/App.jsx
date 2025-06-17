@@ -1,26 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, lazy, Suspense,} from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
+
 
 import "./App.css";
 import ShopLayout from "./components/shopComponents/ShopLayout";
 import Home from "./pages/user/Home";
-import Notfound from "./pages/notfound/Notfound";
+import Spinner from "./components/common/Spinner";
+const Notfound = lazy(()=>import("./pages/notfound/Notfound"))
+
 import Product from "./pages/user/Product";
-import Checkout from "./pages/user/Checkout";
-import Account from "./pages/user/Account";
+const Checkout = lazy(()=>import("./pages/user/Checkout"))
+const Account = lazy(()=>import("./pages/user/Account"))
 import Authlayout from "./components/authComponents/Authlayout";
-import Registration from "./pages/auth/Registration";
+const Registration = lazy(()=>import("./pages/auth/Registration"))
 import Login from "./pages/auth/Login";
-import AdminLayout from "./components/adminComponents/adminLayout";
-import AdminDashboard from "./pages/admin/AdminDashboard";
-import Features from "./pages/admin/Features";
-import Orders from "./pages/admin/Orders";
-import AdminProduct from "./pages/admin/AdminProduct";
+const AdminLayout = lazy(()=>import("./components/adminComponents/adminLayout"))
+const AdminDashboard = lazy(()=>import("./pages/admin/AdminDashboard"))
+const Features = lazy(()=>import("./pages/admin/Features"))
+const Orders = lazy(()=>import("./pages/admin/Orders"))
+const AdminProduct = lazy(()=>import("./pages/admin/AdminProduct"))
 import CheckAuth from "./components/authComponents/CheckAuth";
 import { useDispatch, useSelector } from "react-redux";
 import { checkAuth } from "./store/authReducer";
-import PaypalReturn from "./pages/user/PaypalReturn";
-import PaypalCancel from "./pages/user/PaypalCancel";
+const PaypalReturn = lazy(()=>import("./pages/user/PaypalReturn"))
+const PaypalCancel = lazy(()=>import("./pages/user/PaypalCancel"))
+
 
 function App() {
   const { user, isAuthenticated } = useSelector((state) => state.auth);
@@ -33,6 +37,8 @@ function App() {
 
   return (
     <div className="flex flex-col overflow-hidden bg-white w-full">
+    <Suspense fallback={<Spinner/>
+    }>
       <Routes>
         <Route path="/" element={<Navigate to="/shop/home" replace />} />
 
@@ -94,6 +100,7 @@ function App() {
           <Route path="cancel" element={<PaypalCancel />} />
         </Route>
       </Routes>
+      </Suspense>
     </div>
   );
 }
